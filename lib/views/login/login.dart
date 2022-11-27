@@ -24,7 +24,7 @@ class Login extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     color: Colors.white,
-                    height: 600,
+                    height: 665,
                     padding: const EdgeInsets.only(top: 30),
                     child: Center(
                       child: Column(
@@ -117,7 +117,7 @@ class Login extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     color: const Color(0xFF004990),
-                    height: 150,
+                    height: 100,
                     child: Center(
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -148,5 +148,3 @@ class Login extends StatelessWidget {
     );
   }
 }
-
-
