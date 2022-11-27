@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sfaef/views/dashboard/dashboardResponsable.dart';
 
@@ -62,7 +64,19 @@ class Login extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                             )),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          FirebaseFirestore.instance
+                                              .collection("responsable")
+                                              .doc("219219494")
+                                              .get()
+                                              .then((value) {
+                                            if (value.data() != null) {
+                                              print(value.data());
+                                            } else{
+                                              print("No existe");
+                                            }
+                                          });
+                                        },
                                         child: const Text(
                                           "Solicitar Evento Formativo",
                                           style: TextStyle(
@@ -148,5 +162,3 @@ class Login extends StatelessWidget {
     );
   }
 }
-
-
