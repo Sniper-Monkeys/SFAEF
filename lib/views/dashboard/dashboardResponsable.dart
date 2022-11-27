@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
+import '../eventoFormativo/eventoFormativoForm.dart';
 import '../utils/utils.dart';
 
 class DashboardResponsable extends StatefulWidget {
@@ -23,50 +21,54 @@ class _DashboardResponsableState extends State<DashboardResponsable> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               header(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      width: double.infinity,
-                      color: Colors.white,
-                      padding: const EdgeInsets.only(top: 30),
-                      child: SizedBox(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                tituloDecorado(
-                                  titulo: "Administrar Eventos",
-                                ),
-                                botonNuevoEventoFormativo(context),
-                              ],
-                            ),
-                            const SizedBox(
-                                height: 500,
-                                child: EventsList(
-                                  tipoEvento: TipoEvento.EventoActivo,
-                                )),
-                            const SizedBox(
-                                height: 500,
-                                child: EventsList(
-                                  tipoEvento: TipoEvento.EventoPasado,
-                                )),
-                            const SizedBox(
-                                height: 500,
-                                child: EventsList(
-                                  tipoEvento: TipoEvento.EventoRechazado,
-                                )),
-                          ],
-                        ),
-                      )),
-                ],
-              ),
+              listaEventosView(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Column listaEventosView(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+            width: double.infinity,
+            color: Colors.white,
+            padding: const EdgeInsets.only(top: 30),
+            child: SizedBox(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const TituloDecorado(
+                        titulo: "Administrar Eventos",
+                      ),
+                      botonNuevoEventoFormativo(context),
+                    ],
+                  ),
+                  const SizedBox(
+                      height: 500,
+                      child: EventsList(
+                        tipoEvento: TipoEvento.eventoActivo,
+                      )),
+                  const SizedBox(
+                      height: 500,
+                      child: EventsList(
+                        tipoEvento: TipoEvento.eventoPasado,
+                      )),
+                  const SizedBox(
+                      height: 500,
+                      child: EventsList(
+                        tipoEvento: TipoEvento.eventoRechazado,
+                      )),
+                ],
+              ),
+            )),
+      ],
     );
   }
 
@@ -85,7 +87,7 @@ class _DashboardResponsableState extends State<DashboardResponsable> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => NuevoEventoFormativo(),
+                builder: (context) => const NuevoEventoFormativo(),
               ),
             );
           },
@@ -95,206 +97,9 @@ class _DashboardResponsableState extends State<DashboardResponsable> {
           )),
     );
   }
-
-  Future<dynamic> nuevoEventoFormativo(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            scrollable: true,
-            title: Column(
-              children: [
-                Container(
-                  color: const Color(0xFF004990),
-                  child: const Text(
-                    "Sistema de Formulación y Aprobación de Eventos Formativos (SFAEF)",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                Container(height: 150, child: header())
-              ],
-            ),
-            content: Container(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              width: 500,
-              child: Center(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  tituloDecorado(
-                    titulo: "PROCESO DE SOLICITUD DE EVENTOS FORMATIVOS",
-                    fontSize: 16,
-                  ),
-                  Container(
-                    height: 500,
-                    width: 500,
-                    color: const Color(0xFFF7F7F7),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          tituloDecorado(
-                            titulo: "DATOS DEL EVENTO FORMATIVO",
-                            fontSize: 16,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Form(
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          labelText: "NOMBRE DEL EVENTO",
-                                          // border bottom orang
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          labelText: "TIPO DE EVENTO",
-                                          // border bottom orang
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Expanded(
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          labelText: "MODALIDAD",
-                                          // border bottom orang
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        minLines: 5,
-                                        maxLines: 5,
-                                        decoration: const InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          labelText: "DESCRIPCIÓN",
-                                          // border bottom orang
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Expanded(
-                                      child: TextFormField(
-                                        minLines: 5,
-                                        maxLines: 5,
-                                        decoration: const InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-
-                                          labelText:
-                                              "DEFINICIÓN DE LOS OBJECTIVOS",
-                                          // border bottom orang
-
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                          focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.orange),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("No")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Si")),
-            ],
-          );
-        });
-  }
 }
 
-enum TipoEvento { EventoActivo, EventoPasado, EventoRechazado }
+enum TipoEvento { eventoActivo, eventoPasado, eventoRechazado }
 
 class EventsList extends StatelessWidget {
   final TipoEvento tipoEvento;
@@ -324,9 +129,9 @@ class EventsList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    tipoEvento == TipoEvento.EventoActivo
+                    tipoEvento == TipoEvento.eventoActivo
                         ? "Eventos Activos"
-                        : tipoEvento == TipoEvento.EventoPasado
+                        : tipoEvento == TipoEvento.eventoPasado
                             ? "Eventos Pasados"
                             : "Eventos Rechazados",
                     style: const TextStyle(
@@ -337,7 +142,7 @@ class EventsList extends StatelessWidget {
                   Container(
                     width: 63,
                     height: 3,
-                    color: tipoEvento == TipoEvento.EventoRechazado
+                    color: tipoEvento == TipoEvento.eventoRechazado
                         ? const Color(0xFFAA1804)
                         : Colors.orange,
                   ),
@@ -397,7 +202,7 @@ class Evento extends StatelessWidget {
         border: Border(
           left: BorderSide(
             width: 28.0,
-            color: tipoEvento == TipoEvento.EventoRechazado
+            color: tipoEvento == TipoEvento.eventoRechazado
                 ? const Color(0xFFAA1804)
                 : Colors.orange,
           ),
@@ -446,458 +251,5 @@ class Evento extends StatelessWidget {
         ),
       ]),
     );
-  }
-}
-
-class NuevoEventoFormativo extends StatefulWidget {
-  NuevoEventoFormativo({Key? key}) : super(key: key);
-
-  @override
-  State<NuevoEventoFormativo> createState() => _NuevoEventoFormativoState();
-}
-
-class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: appBarTitle(),
-        body: SingleChildScrollView(
-          child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  header(),
-                  Container(
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    width: 600,
-                    child: Center(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        tituloDecorado(
-                          titulo: "PROCESO DE SOLICITUD DE EVENTOS FORMATIVOS",
-                          fontSize: 16,
-                        ),
-                        Container(
-                          color: const Color(0xFFF7F7F7),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                tituloDecorado(
-                                  titulo: "DATOS DEL EVENTO FORMATIVO",
-                                  fontSize: 16,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Form(
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText: "NOMBRE DEL EVENTO",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText: "TIPO DE EVENTO",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText: "MODALIDAD",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              minLines: 5,
-                                              maxLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText: "DESCRIPCIÓN",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              minLines: 5,
-                                              maxLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-
-                                                labelText:
-                                                    "DEFINICIÓN DE LOS OBJECTIVOS",
-                                                // border bottom orang
-
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              minLines: 5,
-                                              maxLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText:
-                                                    "CONTENIDO Y LA ESTRUCTURA DEL PROGRAMA",
-                                                hintText:
-                                                    "Ej. El programa consiste de tres fases principales...",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                TextFormField(
-                                                  minLines: 1,
-                                                  maxLines: 1,
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    fillColor: Colors.white,
-                                                    filled: true,
-
-                                                    labelText: "COSTO",
-                                                    // border bottom orang
-
-                                                    enabledBorder:
-                                                        UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.orange),
-                                                    ),
-                                                    focusedBorder:
-                                                        UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.orange),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                TextFormField(
-                                                  minLines: 5,
-                                                  maxLines: 5,
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    fillColor: Colors.white,
-                                                    filled: true,
-
-                                                    labelText:
-                                                        "EXPERIENCIAS DE APRENDIZAJE",
-                                                    // border bottom orang
-
-                                                    enabledBorder:
-                                                        UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.orange),
-                                                    ),
-                                                    focusedBorder:
-                                                        UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.orange),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      // ANOTHER EXPANDED TO CUPO AND DURACION
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText: "CUPO",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText:
-                                                    "DURACIÓN DEL EVENTO (HRS)",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              maxLines: 5,
-                                              minLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-
-                                                filled: true,
-                                                labelText:
-                                                    "ESTRATEGIA DE EVALUACIÓN",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              maxLines: 5,
-                                              minLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText:
-                                                    "REFERENCIAS TEÓRICAS-METODOLÓGICAS",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              maxLines: 5,
-                                              minLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-
-                                                filled: true,
-                                                labelText:
-                                                    "RECURSOS Y MATERIALES DIDÁCTICOS DE APOYO",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            child: TextFormField(
-                                              maxLines: 5,
-                                              minLines: 5,
-                                              decoration: const InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                labelText:
-                                                    "UTILIDAD Y OPORTUNIDAD DEL PROGRAMA",
-                                                // border bottom orang
-                                                enabledBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                                focusedBorder:
-                                                    UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.orange),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-                  ),
-                ],
-              )),
-        ));
   }
 }

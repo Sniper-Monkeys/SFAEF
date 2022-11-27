@@ -1,11 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sfaef/views/dashboard/dashboardResponsable.dart';
 
 import '../utils/utils.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool isLogin = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +37,7 @@ class Login extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            tituloDecorado(
+                            const TituloDecorado(
                               titulo:
                                   "PROCESO DE SOLICITUD DE EVENTOS FORMATIVOS",
                             ),
@@ -85,11 +92,24 @@ class Login extends StatelessWidget {
                                                   BorderRadius.circular(16),
                                             )),
                                         onPressed: () {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const DashboardResponsable()));
+                                          setState(() {
+                                            isLogin = true;
+                                          });
+                                          FirebaseAuth.instance
+                                              .signInWithEmailAndPassword(
+                                                  email: 'martinxf22@gmail.com',
+                                                  password: 'test123')
+                                              .then((value) => {
+                                                    if (value.user != null)
+                                                      {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        const DashboardResponsable()))
+                                                      }
+                                                  });
                                         },
                                         child: const Text(
                                           "Iniciar Sesión",
@@ -108,35 +128,40 @@ class Login extends StatelessWidget {
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xFF004990)),
                                   ),
+                                  if (isLogin)
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Center(
+                                          child: CircularProgressIndicator(
+                                            backgroundColor: Colors.white,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.orange),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          'Iniciando sesión...',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF004990)),
+                                        ),
+                                      ],
+                                    )
                                 ],
                               ),
                             )
                           ]),
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    color: const Color(0xFF004990),
-                    height: 100,
-                    child: Center(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text('2022 |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(' Consejo Divisional |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(' Secretaría General Académica |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(' Universidad de Sonora |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                          ]),
-                    ),
-                  ),
+                  const FootterSFAEF(),
                 ],
               )
 
@@ -147,4 +172,10 @@ class Login extends StatelessWidget {
       ),
     );
   }
+
+  // Widget loginButton(BuildContext context) {
+  //   return StatefulBuilder(builder: (context, setState) {
+  //     return
+  //   });
+  // }
 }

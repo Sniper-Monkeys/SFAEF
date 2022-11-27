@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../Models/responsable.dart';
+import '../models/responsable.dart';
 
-class ResponsableProvider with ChangeNotifier{
+class ResponsableProvider with ChangeNotifier {
   Responsable? _responsable;
   Responsable get responsable => _responsable!;
 
