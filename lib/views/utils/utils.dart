@@ -48,10 +48,10 @@ SizedBox header() {
   );
 }
 
-class tituloDecorado extends StatelessWidget {
+class TituloDecorado extends StatelessWidget {
   final String titulo;
-  double fontSize;
-   tituloDecorado(
+  final double fontSize;
+  const TituloDecorado(
     {
     required this.titulo,
     this.fontSize = 24,
@@ -69,7 +69,7 @@ class tituloDecorado extends StatelessWidget {
           style:  TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF004990)),
+              color:const Color(0xFF004990)),
         ),
         //LINE ORANGE IN START
         Container(
@@ -78,6 +78,40 @@ class tituloDecorado extends StatelessWidget {
           color: Colors.orange,
         ),
       ],
+    );
+  }
+}
+
+
+class FootterSFAEF extends StatelessWidget {
+  const FootterSFAEF({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF004990),
+      height: 100,
+      child: Center(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('2022 |',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 16)),
+              Text(' Consejo Divisional |',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 16)),
+              Text(' Secretaría General Académica |',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 16)),
+              Text(' Universidad de Sonora |',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 16)),
+            ]),
+      ),
     );
   }
 }

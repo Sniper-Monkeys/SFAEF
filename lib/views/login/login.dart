@@ -1,10 +1,35 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sfaef/views/dashboard/dashboardResponsable.dart';
 
 import '../utils/utils.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool isLogin = false;
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  //email validator
+  bool emailValidator(String? value) {
+    if (value == null || value.isEmpty || !value.contains('@')) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // login(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +49,13 @@ class Login extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     color: Colors.white,
-                    height: 600,
+                    height: 700,
                     padding: const EdgeInsets.only(top: 30),
                     child: Center(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            tituloDecorado(
+                            const TituloDecorado(
                               titulo:
                                   "PROCESO DE SOLICITUD DE EVENTOS FORMATIVOS",
                             ),
@@ -40,7 +65,7 @@ class Login extends StatelessWidget {
                             ),
                             Container(
                               width: 894,
-                              height: 432,
+                              height: 600,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFF7F7F7),
                                 //circular border
@@ -72,34 +97,92 @@ class Login extends StatelessWidget {
                                           ),
                                         )),
                                   ),
-                                  SizedBox(
-                                    height: 109,
-                                    width: 692,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            elevation: 10,
-                                            backgroundColor:
-                                                const Color(0xFFF7A11A),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            )),
-                                        onPressed: () {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const DashboardResponsable()));
-                                        },
-                                        child: const Text(
-                                          "Iniciar Sesión",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        )),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
+                                  // login credentials
+                                  // email input
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          width: 692,
+                                          height: 60,
+                                          child: TextField(
+                                            controller: _emailController,
+                                            // validator: emailValidator,
+
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+
+                                              // orange border and blue label
+                                              label: Text(
+                                                "Correo",
+                                                style: TextStyle(
+                                                  color: Color(0xFF0F4C81),
+                                                ),
+                                              ),
+                                              hintText: "Ingrese su correo",
+                                              icon: Icon(
+                                                Icons.email,
+                                                color: Color(0xFF0F4C81),
+                                              ),
+
+                                              labelStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Color(0xFF004990)),
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // password input
+                                        SizedBox(
+                                          width: 692,
+                                          height: 60,
+                                          child: TextField(
+                                            controller: _passwordController,
+                                            onSubmitted: (value) =>
+                                                login(context),
+                                            obscureText: true,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Contraseña',
+                                              hintText: "********",
+                                              icon: Icon(
+                                                Icons.lock,
+                                                color: Color(0xFF0F4C81),
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Color(0xFF004990)),
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  loginButton(context),
                                   const Text(
                                     '* En caso de contar con un evento formativo aprobado previamente por el SFAEF favor de iniciar sesión',
                                     textAlign: TextAlign.center,
@@ -108,35 +191,40 @@ class Login extends StatelessWidget {
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xFF004990)),
                                   ),
+                                  if (isLogin)
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Center(
+                                          child: CircularProgressIndicator(
+                                            backgroundColor: Colors.white,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.orange),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          'Iniciando sesión...',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF004990)),
+                                        ),
+                                      ],
+                                    )
                                 ],
                               ),
                             )
                           ]),
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    color: const Color(0xFF004990),
-                    height: 150,
-                    child: Center(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text('2022 |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(' Consejo Divisional |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(' Secretaría General Académica |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                            Text(' Universidad de Sonora |',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                          ]),
-                    ),
-                  ),
+                  const FootterSFAEF(),
                 ],
               )
 
@@ -147,6 +235,88 @@ class Login extends StatelessWidget {
       ),
     );
   }
+
+  SizedBox loginButton(BuildContext context) {
+    return SizedBox(
+      height: 109,
+      width: 692,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              elevation: 10,
+              backgroundColor: const Color(0xFFF7A11A),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              )),
+          onPressed: () {
+            login(context);
+          },
+          child: const Text(
+            "Iniciar Sesión",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 40,
+              fontWeight: FontWeight.w400,
+            ),
+          )),
+    );
+  }
+
+  Future<void> login(BuildContext context) async {
+    _emailController.text = 'a219205955@unison.mx';
+    _passwordController.text = 'admin123';
+    if (emailValidator(_emailController.text)) {
+      setState(() {
+        isLogin = true;
+      });
+
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text)
+          .then((value) {
+        if (value.user != null) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const DashboardResponsable()));
+        } else {
+          setState(() {
+            isLogin = false;
+          });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.red,
+                content: Text('Usuario o contraseña incorrectos'),
+              ),
+            );
+          });
+        }
+      }).onError((error, stackTrace) {
+        setState(() {
+          isLogin = false;
+        });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('Usuario o contraseña incorrectos'),
+            ),
+          );
+        });
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Credenciales incorrectas'),
+        ),
+      );
+    }
+  }
+
+  // Widget loginButton(BuildContext context) {
+  //   return StatefulBuilder(builder: (context, setState) {
+  //     return
+  //   });
+  // }
 }
-
-

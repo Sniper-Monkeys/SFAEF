@@ -1,9 +1,7 @@
-import 'package:sfaef/Models/usuario.dart';
-
 import './usuario.dart';
 import './evento.dart';
 
-class Responsable extends Usuario{
+class Responsable extends Usuario {
   String nombre;
   String idInstitucional;
   List<Evento> eventos;
@@ -21,9 +19,10 @@ class Responsable extends Usuario{
   String get getNombre => nombre;
   String get getIdInstitucional => idInstitucional;
   List<Evento> get getListaEventos => eventos;
-  Evento getEvento(String idEvento) => eventos.firstWhere((element) => element.idEvento == idEvento);
+  Evento getEvento(String idEvento) =>
+      eventos.firstWhere((element) => element.idEvento == idEvento);
 
-  SolicitarEvento(Evento evento){
+  solicitarEvento(Evento evento) {
     evento.estatus = "Activo";
     eventos.add(evento);
   }
@@ -37,6 +36,7 @@ class Responsable extends Usuario{
         tipo: map['tipo'],
       );
 
+  @override
   Map<String, dynamic> toMap() => {
         'nombre': nombre,
         'idInstitucional': idInstitucional,
@@ -45,5 +45,4 @@ class Responsable extends Usuario{
         'correo': correo,
         'tipo': tipo,
       };
-
 }
