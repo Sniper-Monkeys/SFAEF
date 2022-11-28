@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/services.dart';
 import '../models/evento.dart';
 
 class EventoProvider with ChangeNotifier {
-  Evento _responsable = Evento(
+  final Evento _responsable = Evento(
       idEvento: '',
       idUsuario: '',
       nombre: TextEditingController(),
@@ -33,7 +34,8 @@ class EventoProvider with ChangeNotifier {
       estatus: 'En Espera',
       modalidad: TextEditingController(),
       expInstructores: TextEditingController(),
-      documentos: []);
+      documentos: [],
+      guardadoEl: DateTime.now());
   Evento get responsable => _responsable;
   // controlador para agregar un nuevo evento formativo
   int index = 0;
@@ -45,17 +47,17 @@ class EventoProvider with ChangeNotifier {
 
   TextEditingController nombreEvento = TextEditingController();
 
-  Future<void> fetchResponsable(String id) async {
-    await FirebaseFirestore.instance
-        .collection('responsables')
-        .doc(id)
-        .get()
-        .then((value) {
-      _responsable = Evento.fromFirebase(value.data());
-      notifyListeners();
-    });
-    return null;
-  }
+  // Future<void> fetchResponsable(String id) async {
+  //   await FirebaseFirestore.instance
+  //       .collection('responsables')
+  //       .doc(id)
+  //       .get()
+  //       .then((value) {
+  //     _responsable = Evento.fromFirebase(value.data());
+  //     notifyListeners();
+  //   });
+  //   return null;
+  // }
 
   Future<bool> attachfile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -77,7 +79,6 @@ class EventoProvider with ChangeNotifier {
           });
           return true;
         } catch (e) {
-          print(e);
           return false;
         }
       }
@@ -87,9 +88,25 @@ class EventoProvider with ChangeNotifier {
     return false;
   }
 
+  Future<List<Evento>> getEventos(String tipo) async {
+    var data = await FirebaseFirestore.instance
+        .collection('evento')
+        .where('idUsuario', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('estatus', isEqualTo: tipo)
+        .get()
+        .then((value) {
+      return value.docs.map((e) => Evento.fromFirebase(e.data())).toList();
+    });
+
+    return data;
+  }
+
   Future<bool> addEvento() async {
     // generar un id aleatorio de 6 digitos
+
     String id = (100000 + Random().nextInt(900000)).toString();
+    _responsable.idEvento = id;
+    _responsable.idUsuario = FirebaseAuth.instance.currentUser!.uid;
     // REVISAR SI EXISTE
     bool existe = await FirebaseFirestore.instance
         .collection('evento')
@@ -107,5 +124,20 @@ class EventoProvider with ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  Future<Evento?> fetchEvento(String id) async {
+    Evento? evento = await FirebaseFirestore.instance
+        .collection('evento')
+        .doc(id)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        return Evento.fromFirebase(value.data()!);
+      } else {
+        return null;
+      }
+    });
+    return evento;
   }
 }

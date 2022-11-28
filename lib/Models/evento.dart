@@ -31,6 +31,7 @@ class Evento {
   String estatus;
   TextEditingController expInstructores;
   List<String> documentos;
+  DateTime guardadoEl;
 
   Evento({
     required this.idEvento,
@@ -57,6 +58,7 @@ class Evento {
     required this.modalidad,
     required this.expInstructores,
     required this.documentos,
+    required this.guardadoEl,
   });
 
   // Getters
@@ -84,32 +86,35 @@ class Evento {
   TextEditingController get getModalidad => modalidad;
   TextEditingController get getExpInstructores => expInstructores;
   List<String> get getDocumentos => documentos;
+  DateTime get getGuardadoEl => guardadoEl;
 
   factory Evento.fromFirebase(dynamic map) => Evento(
         idEvento: map['idEvento'],
         idUsuario: map['idUsuario'],
-        nombre: map['nombre'],
-        tipo: map['tipo'],
-        descripcion: map['descripcion'],
-        objetivos: map['objetivos'],
-        contYEstructura: map['contYEstructura'],
-        costo: map['costo'],
-        cupo: map['cupo'],
-        experiencias: map['experiencias'],
-        duracion: map['duracion'],
-        evaluacion: map['evalaucion'],
-        referencias: map['referencias'],
-        materialApoyo: map['materialApoyo'],
-        utilidad: map['utilidad'],
-        reqParticipacion: map['reqParticipacion'],
-        reqAcreditacion: map['reqAcreditacion'],
-        condicionesOperativas: map['condicionesOperativas'],
-        dispRecursos: map['dispRecursos'],
-        codigoInv: map['codigoInv'],
+        nombre: TextEditingController(text: map['nombre']),
+        tipo: TextEditingController(text: map['tipo']),
+        descripcion: TextEditingController(text: map['descripcion']),
+        objetivos: TextEditingController(text: map['objetivos']),
+        contYEstructura: TextEditingController(text: map['contYEstructura']),
+        costo: TextEditingController(text: map['costo']),
+        cupo: TextEditingController(text: map['cupo']),
+        experiencias: TextEditingController(text: map['experiencias']),
+        duracion: TextEditingController(text: map['duracion']),
+        evaluacion: TextEditingController(text: map['evaluacion']),
+        referencias: TextEditingController(text: map['referencias']),
+        materialApoyo: TextEditingController(text: map['materialApoyo']),
+        utilidad: TextEditingController(text: map['utilidad']),
+        reqParticipacion: TextEditingController(text: map['reqParticipacion']),
+        reqAcreditacion: TextEditingController(text: map['reqAcreditacion']),
+        condicionesOperativas:
+            TextEditingController(text: map['condicionesOperativas']),
+        dispRecursos: TextEditingController(text: map['dispRecursos']),
+        codigoInv: TextEditingController(text: map['codigoInv']),
         estatus: map['estatus'],
-        modalidad: map['modalidad'],
-        expInstructores: map['expInstructores'],
+        modalidad: TextEditingController(text: map['modalidad']),
+        expInstructores: TextEditingController(text: map['expInstructores']),
         documentos: List<String>.from(map['documentos']),
+        guardadoEl: DateTime.parse(map['guardadoEl']),
       );
 
   Map<String, dynamic> toMap() => {
@@ -137,5 +142,9 @@ class Evento {
         'modalidad': modalidad.text,
         'expInstructores': expInstructores.text,
         'documentos': documentos,
+        'guardadoEl': guardadoEl.toIso8601String(),
       };
+
+  String get fechaFormateada =>
+      "${guardadoEl.day}/${guardadoEl.month}/${guardadoEl.year}";
 }

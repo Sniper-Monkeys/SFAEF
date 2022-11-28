@@ -1,19 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sfaef/controller/eventoProvider.dart';
+import 'package:sfaef/views/eventoFormativo/detalleEvento.dart';
 import 'controller/responsableProvider.dart';
 import 'firebase_options.dart';
 import 'package:sfaef/views/login/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // void main() => runApp(ModularApp(module: AppModule(), child: MyApp()));
+
   runApp(const MyApp());
 }
 
@@ -33,9 +33,24 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title:
                 'Sistema de Formulación y Aprobación de Eventos formativos (SFAEF)',
+            debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: const Login()));
+            // home: const Login(),
+            initialRoute: '/',
+            onGenerateRoute: (settings) {
+              // print(settings.name);
+              String id = settings.name!.split('?').last.split('=').last;
+              if (settings.name != null) {
+                if (settings.name!.contains('eventos')) {
+                  return MaterialPageRoute(
+                      builder: (context) => DetalleEvento(id: id));
+                } else {
+                  return MaterialPageRoute(builder: (context) => const Login());
+                }
+              }
+              return null;
+            }));
   }
 }
