@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    login(context);
+    // login(context);
   }
 
   @override
@@ -248,8 +248,8 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> login(BuildContext context) async {
-    _emailController.text = 'a219205955@unison.mx';
-    _passwordController.text = 'admin123';
+    // _emailController.text = 'a219205955@unison.mx';
+    // _passwordController.text = 'admin123';
     if (emailValidator(_emailController.text)) {
       setState(() {
         isLogin = true;
