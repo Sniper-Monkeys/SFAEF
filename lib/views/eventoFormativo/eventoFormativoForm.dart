@@ -194,48 +194,135 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
           const SizedBox(
             height: 20,
           ),
-          Row(
+          Column(
             children: [
-              Expanded(
-                child: TextFormField(
-                  controller: eventoProvider.responsable.tipo,
-                  decoration: const InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: "TIPO DE EVENTO",
-                    // border bottom orang
-                    labelStyle:
-                        TextStyle(fontSize: 16, color: Color(0xFF004990)),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Expanded(
+                      child: Text(
+                    "TIPO DE EVENTO FORMATIVO",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF004990),
+                        fontWeight: FontWeight.bold),
+                  )),
+                  Expanded(
+                      child: Text("MODALIDAD",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF004990),
+                              fontWeight: FontWeight.bold))),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child:
+                        // dropdown de tipo de evento with 'Curso', 'Taller', 'Programa Especial', 'Diplomado'
+                        Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButton(
+                            items: eventoProvider.tiposEvento,
+                            value: eventoProvider.tipoEvento,
+                            onChanged: (value) {
+                              eventoProvider.setTipoEvento = value;
+                              eventoProvider.responsable.tipo.text =
+                                  value.toString();
+                            },
+
+                            style: const TextStyle(
+                                fontSize: 16, color: Color(0xFF004990)),
+                            underline: Container(
+                              height: 1,
+                              color: Colors.orange,
+                            ),
+                            dropdownColor: Colors.white,
+
+                            isExpanded: true,
+                            // backgroundColor: Colors.white,
+                            hint: const Text(
+                              "TIPO DE EVENTO",
+                              style: TextStyle(
+                                  fontSize: 16, color: Color(0xFF004990)),
+                            ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.orange,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          tooltip:
+                              "Curso. Es una experiencia de aprendizaje\nque proporciona elementos\nteóricos y metodológicos de un tema o\nproblemática específica. Tiene\nobjectivos claros y puede construirise como\nactividad modular de un\nDipomado. El valor curricular es a partir de 20 Horas.\n\nTaller. Forma de trabajo en donde el\nparticipante construye su\naprenidzaje por medio de la realización de \nejercicios que son definidos\na partir de un programa de formación\nintegrado por temas que\nresponden a objetivos de aprendizaje\nconcretos. El valor curricular es\napartir de 10 horas.\n\nPrograma especial. Es una experiencia de\naprendizaje, de duración\nvariable, conformada de diversos módulos\ntalles u otros. El valor\ncurricular es a partir de 20 horas\n\nDiplomado. Su objectivo es transmitir\nhabilidades para atender\nsituaciones de importancia profesional y\nsocial.Los contenidos que\nse desarollan deben ser de relevancia y\nactualidad en el escenario\nde la práctica académica o profesional. Los\ndiplomados se organizan\nen módulos estructurados en un programa\nde estudios. Su duración\nminima es de 120 horas.",
+                          icon: const Icon(
+                            Icons.help,
+                            color: Color(0xFF004990),
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("TIPO DE EVENTO FORMATIVO"),
+                                  content: const Text(
+                                      "Seleccione el tipo de evento formativo que desea realizar"),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text("OK"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                child: TextFormField(
-                  controller: eventoProvider.responsable.modalidad,
-                  decoration: const InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    labelText: "MODALIDAD",
-                    // border bottom orang
-                    labelStyle:
-                        TextStyle(fontSize: 16, color: Color(0xFF004990)),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: DropdownButton(
+                      items: eventoProvider.modalidadesEvento,
+                      value: eventoProvider.modalidadEvento,
+                      onChanged: (value) {
+                        eventoProvider.setModalidadEvento = value;
+                        eventoProvider.responsable.modalidad.text =
+                            value.toString();
+                      },
+                      style: const TextStyle(
+                          fontSize: 16, color: Color(0xFF004990)),
+
+                      underline: Container(
+                        height: 1,
+                        color: Colors.orange,
+                      ),
+                      dropdownColor: Colors.white,
+
+                      isExpanded: true,
+                      // backgroundColor: Colors.white,
+                      hint: const Text(
+                        "MODALIDAD",
+                        style:
+                            TextStyle(fontSize: 16, color: Color(0xFF004990)),
+                      ),
+
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.orange,
+                        size: 30,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
@@ -639,8 +726,7 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
-                    labelText:
-                        "EN SU CASO, LA CAPACIDAD DE\nAUTOFINANCIAMIENTO O DISPONIBLIDAD\nDE RECURSOS",
+                    labelText: "CAPACIDAD DE AUTOFINANCIAMIENTO",
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),

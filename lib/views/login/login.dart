@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    // login(context);
+    login(context);
   }
 
   @override
@@ -43,190 +43,8 @@ class _LoginState extends State<Login> {
             children: [
               //assets/images/Unison-1.jpg is background image with 40% opacity and assets/images/logo.png is centered logo
               header(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    color: Colors.white,
-                    height: 700,
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const TituloDecorado(
-                              titulo:
-                                  "PROCESO DE SOLICITUD DE EVENTOS FORMATIVOS",
-                            ),
-                            //container with F7F7F7 background color
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              width: 894,
-                              height: 600,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF7F7F7),
-                                //circular border
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  SizedBox(
-                                    height: 109,
-                                    width: 692,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            elevation: 10,
-                                            backgroundColor:
-                                                const Color(0xFFF7A11A),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            )),
-                                        onPressed: () {},
-                                        child: const Text(
-                                          "Solicitar Evento Formativo",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  // login credentials
-                                  // email input
-                                  Form(
-                                    key: _formKey,
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          width: 692,
-                                          height: 60,
-                                          child: TextField(
-                                            controller: _emailController,
-                                            // validator: emailValidator,
-
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(),
-
-                                              // orange border and blue label
-                                              label: Text(
-                                                "Correo",
-                                                style: TextStyle(
-                                                  color: Color(0xFF0F4C81),
-                                                ),
-                                              ),
-                                              hintText: "Ingrese su correo",
-                                              icon: Icon(
-                                                Icons.email,
-                                                color: Color(0xFF0F4C81),
-                                              ),
-
-                                              labelStyle: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Color(0xFF004990)),
-                                              enabledBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.orange),
-                                              ),
-                                              focusedBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.orange),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        // password input
-                                        SizedBox(
-                                          width: 692,
-                                          height: 60,
-                                          child: TextField(
-                                            controller: _passwordController,
-                                            onSubmitted: (value) =>
-                                                login(context),
-                                            obscureText: true,
-                                            decoration: const InputDecoration(
-                                              border: OutlineInputBorder(),
-                                              labelText: 'Contraseña',
-                                              hintText: "********",
-                                              icon: Icon(
-                                                Icons.lock,
-                                                color: Color(0xFF0F4C81),
-                                              ),
-                                              labelStyle: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Color(0xFF004990)),
-                                              enabledBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.orange),
-                                              ),
-                                              focusedBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.orange),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  loginButton(context),
-                                  const Text(
-                                    '* En caso de contar con un evento formativo aprobado previamente por el SFAEF favor de iniciar sesión',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF004990)),
-                                  ),
-                                  if (isLogin)
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [
-                                        Center(
-                                          child: CircularProgressIndicator(
-                                            backgroundColor: Colors.white,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Colors.orange),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                          'Iniciando sesión...',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color(0xFF004990)),
-                                        ),
-                                      ],
-                                    )
-                                ],
-                              ),
-                            )
-                          ]),
-                    ),
-                  ),
-                  const FootterSFAEF(),
-                ],
-              )
+              loginMainPage(context),
+              const FootterSFAEF(),
 
               //footer every in the bottom
             ],
@@ -236,8 +54,176 @@ class _LoginState extends State<Login> {
     );
   }
 
-  SizedBox loginButton(BuildContext context) {
-    return SizedBox(
+  Column loginMainPage(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          width: double.infinity,
+          color: Colors.white,
+          padding: const EdgeInsets.only(top: 30),
+          child: Center(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const TituloDecorado(
+                titulo: "PROCESO DE SOLICITUD DE EVENTOS FORMATIVOS",
+              ),
+              //container with F7F7F7 background color
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: 894,
+                height: 600,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF7F7F7),
+                  //circular border
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 30, right: 30),
+                      height: 109,
+                      width: 692,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              backgroundColor: const Color(0xFFF7A11A),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              )),
+                          onPressed: () {},
+                          child: const Text(
+                            "Solicitar Evento Formativo",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    // login credentials
+                    // email input
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 692,
+                            height: 60,
+                            child: TextField(
+                              controller: _emailController,
+                              // validator: emailValidator,
+
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+
+                                // orange border and blue label
+                                label: Text(
+                                  "Correo",
+                                  style: TextStyle(
+                                    color: Color(0xFF0F4C81),
+                                  ),
+                                ),
+                                hintText: "Ingrese su correo",
+                                icon: Icon(
+                                  Icons.email,
+                                  color: Color(0xFF0F4C81),
+                                ),
+
+                                labelStyle: TextStyle(
+                                    fontSize: 16, color: Color(0xFF004990)),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // password input
+                          SizedBox(
+                            width: 692,
+                            height: 60,
+                            child: TextField(
+                              controller: _passwordController,
+                              onSubmitted: (value) => login(context),
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Contraseña',
+                                hintText: "********",
+                                icon: Icon(
+                                  Icons.lock,
+                                  color: Color(0xFF0F4C81),
+                                ),
+                                labelStyle: TextStyle(
+                                    fontSize: 16, color: Color(0xFF004990)),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.orange),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    loginButton(context),
+                    const Text(
+                      '* En caso de contar con un evento formativo aprobado previamente por el SFAEF favor de iniciar sesión',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF004990)),
+                    ),
+                    if (isLogin)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Center(
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.white,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.orange),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'Iniciando sesión...',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF004990)),
+                          ),
+                        ],
+                      )
+                  ],
+                ),
+              )
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Container loginButton(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 30, right: 30),
       height: 109,
       width: 692,
       child: ElevatedButton(

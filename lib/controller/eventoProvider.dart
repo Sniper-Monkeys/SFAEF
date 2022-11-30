@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/evento.dart';
@@ -43,6 +44,59 @@ class EventoProvider with ChangeNotifier {
   void setIndex(int i) {
     index = i;
     notifyListeners();
+  }
+
+  // CURSO, TALLER, PROGRAMA ESPECIAL, DIPLOMADO
+  List<DropdownMenuItem<Object>>? tiposEvento = const [
+    DropdownMenuItem(
+      value: 'CURSO',
+      child: Text('CURSO'),
+    ),
+    DropdownMenuItem(
+      value: 'TALLER',
+      child: Text('TALLER'),
+    ),
+    DropdownMenuItem(
+      value: 'PROGRAMA ESPECIAL',
+      child: Text('PROGRAMA ESPECIAL'),
+    ),
+    DropdownMenuItem(
+      value: 'DIPLOMADO',
+      child: Text('DIPLOMADO'),
+    ),
+  ];
+
+  // List of dropdown items 'PRESENCIAL', 'EN LINEA', 'MIXTA'
+  List<DropdownMenuItem<Object>>? modalidadesEvento = const [
+    DropdownMenuItem(
+      value: 'PRESENCIAL',
+      child: Text('PRESENCIAL'),
+    ),
+    DropdownMenuItem(
+      value: 'EN LINEA',
+      child: Text('EN LINEA'),
+    ),
+    DropdownMenuItem(
+      value: 'MIXTA',
+      child: Text('MIXTA'),
+    ),
+  ];
+
+  Object tipoEvento = 'CURSO';
+  Object modalidadEvento = 'PRESENCIAL';
+
+  set setTipoEvento(Object? value) {
+    if (value != null) {
+      tipoEvento = value;
+      notifyListeners();
+    }
+  }
+
+  set setModalidadEvento(Object? value) {
+    if (value != null) {
+      modalidadEvento = value;
+      notifyListeners();
+    }
   }
 
   TextEditingController nombreEvento = TextEditingController();

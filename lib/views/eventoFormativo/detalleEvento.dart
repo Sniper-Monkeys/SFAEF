@@ -53,7 +53,8 @@ class _DetalleEventoState extends State<DetalleEvento> {
                         return const Center(
                             child: Text("No se pudo cargar el evento"));
                       }
-                      if (snapshot.data == null) {
+                      if (snapshot.data == null &&
+                          snapshot.connectionState != ConnectionState.waiting) {
                         return const Center(child: Text("No existe el evento"));
                       }
                       if (snapshot.data?.idEvento == widget.id) {
@@ -62,21 +63,24 @@ class _DetalleEventoState extends State<DetalleEvento> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                TituloDecorado(
-                                  titulo:
-                                      "${evento.tipo.text}: ${evento.nombre.text}",
-                                  fontSize: 24,
-                                ),
-                                Text(evento.fechaFormateada,
-                                    style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xFF004990))),
-                              ],
+                            SizedBox(
+                              width: double.infinity,
+                              child: Wrap(
+                                alignment: WrapAlignment.spaceEvenly,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  TituloDecorado(
+                                    titulo:
+                                        "${evento.tipo.text}: ${evento.nombre.text}",
+                                    fontSize: 24,
+                                  ),
+                                  Text(evento.fechaFormateada,
+                                      style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF004990))),
+                                ],
+                              ),
                             ),
 
                             //container with F7F7F7 background and 16 border radius
@@ -108,24 +112,27 @@ class _DetalleEventoState extends State<DetalleEvento> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                codigoQRBoton(evento),
+                Expanded(child: codigoQRBoton(evento)),
               ],
             ),
           const SizedBox(
             height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TituloDecorado(
-                titulo: "Tipo de evento formativo: ${evento.tipo.text}",
-                fontSize: 16,
-              ),
-              TituloDecorado(
-                titulo: "Modalidad: ${evento.modalidad.text}",
-                fontSize: 16,
-              ),
-            ],
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                TituloDecorado(
+                  titulo: "Tipo de evento formativo: ${evento.tipo.text}",
+                  fontSize: 16,
+                ),
+                TituloDecorado(
+                  titulo: "Modalidad: ${evento.modalidad.text}",
+                  fontSize: 16,
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 25,
@@ -187,69 +194,72 @@ class _DetalleEventoState extends State<DetalleEvento> {
           const SizedBox(
             height: 25,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const TituloDecorado(
-                    titulo: "Costo:",
-                    fontSize: 16,
-                  ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Text(evento.costo.text,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF004990))),
-                ],
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              SizedBox(
-                child: Row(
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const TituloDecorado(
-                      titulo: "Duración:",
+                      titulo: "Costo:",
                       fontSize: 16,
                     ),
                     const SizedBox(
                       width: 6,
                     ),
-                    Text("${evento.duracion.text} HRS",
+                    Text(evento.costo.text,
                         style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             color: Color(0xFF004990))),
                   ],
                 ),
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const TituloDecorado(
-                    titulo: "Cupo:",
-                    fontSize: 16,
+                const SizedBox(
+                  width: 30,
+                ),
+                SizedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const TituloDecorado(
+                        titulo: "Duración:",
+                        fontSize: 16,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text("${evento.duracion.text} HRS",
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF004990))),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 6,
-                  ),
-                  Text("${evento.costo.text} personas",
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF004990))),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const TituloDecorado(
+                      titulo: "Cupo:",
+                      fontSize: 16,
+                    ),
+                    const SizedBox(
+                      width: 6,
+                    ),
+                    Text("${evento.costo.text} personas",
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF004990))),
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 25,
@@ -451,9 +461,9 @@ class _DetalleEventoState extends State<DetalleEvento> {
     );
   }
 
-  SizedBox codigoQRBoton(Evento evento) {
-    return SizedBox(
-      width: 400,
+  Container codigoQRBoton(Evento evento) {
+    return Container(
+      margin: const EdgeInsets.all(20),
       height: 70,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(

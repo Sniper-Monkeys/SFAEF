@@ -22,17 +22,16 @@ SizedBox header() {
               image: AssetImage(
                 'assets/images/headerlogo.png',
               ),
-              opacity: 0.15,
               fit: BoxFit.cover,
             ),
           ),
         ),
-        // Container(
-        //   height: 300,
-        //   decoration: BoxDecoration(
-        //     color: Colors.white.withOpacity(0.70),
-        //   ),
-        // ),
+        Container(
+          height: 300,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.70),
+          ),
+        ),
         Center(
           child: Container(
             decoration: const BoxDecoration(
@@ -51,8 +50,7 @@ SizedBox header() {
 class TituloDecorado extends StatelessWidget {
   final String titulo;
   final double fontSize;
-  const TituloDecorado(
-    {
+  const TituloDecorado({
     required this.titulo,
     this.fontSize = 24,
     Key? key,
@@ -66,10 +64,10 @@ class TituloDecorado extends StatelessWidget {
         Text(
           textAlign: TextAlign.start,
           titulo,
-          style:  TextStyle(
+          style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.w500,
-              color:const Color(0xFF004990)),
+              color: const Color(0xFF004990)),
         ),
         //LINE ORANGE IN START
         Container(
@@ -81,7 +79,6 @@ class TituloDecorado extends StatelessWidget {
     );
   }
 }
-
 
 class FootterSFAEF extends StatelessWidget {
   const FootterSFAEF({
@@ -95,22 +92,15 @@ class FootterSFAEF extends StatelessWidget {
       color: const Color(0xFF004990),
       height: 100,
       child: Center(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('2022 |',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16)),
-              Text(' Consejo Divisional |',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16)),
-              Text(' Secretaría General Académica |',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16)),
-              Text(' Universidad de Sonora |',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 16)),
-            ]),
+        child: Wrap(children: const [
+          Text('2022 |', style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(' Consejo Divisional |',
+              style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(' Secretaría General Académica |',
+              style: TextStyle(color: Colors.white, fontSize: 16)),
+          Text(' Universidad de Sonora |',
+              style: TextStyle(color: Colors.white, fontSize: 16)),
+        ]),
       ),
     );
   }

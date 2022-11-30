@@ -46,15 +46,18 @@ class _DashboardResponsableState extends State<DashboardResponsable> {
             child: SizedBox(
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const TituloDecorado(
-                        titulo: "Administrar Eventos",
-                      ),
-                      botonNuevoEventoFormativo(context),
-                    ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceAround,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        const TituloDecorado(
+                          titulo: "Administrar Eventos",
+                        ),
+                        botonNuevoEventoFormativo(context),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                       height: 700,
@@ -83,8 +86,9 @@ class _DashboardResponsableState extends State<DashboardResponsable> {
     );
   }
 
-  SizedBox botonNuevoEventoFormativo(BuildContext context) {
-    return SizedBox(
+  Container botonNuevoEventoFormativo(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 16, left: 16),
       width: 340,
       height: 54,
       child: ElevatedButton(
