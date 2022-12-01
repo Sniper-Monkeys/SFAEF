@@ -22,7 +22,7 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
   Widget build(BuildContext context) {
     return Consumer<EventoProvider>(builder: (context, eventoProvider, child) {
       return Scaffold(
-          appBar: appBarTitle(),
+          appBar: appBarTitle(context),
           body: SingleChildScrollView(
             child: SizedBox(
                 width: double.infinity,
@@ -71,28 +71,36 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                             ),
                             onPressed: () async {
                               if (eventoProvider.index == 0) {
-                                eventoProvider.index = 1;
+                                if (eventoProvider.form1Key.currentState!
+                                    .validate()) {
+                                  eventoProvider.form1Key.currentState!.save();
+                                  eventoProvider.index = 1;
+                                }
                                 setState(() {});
                               } else if (eventoProvider.index == 1) {
-                                bool confirm = await eventoProvider.addEvento();
-
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  if (confirm) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            backgroundColor: Colors.green,
-                                            content: Text(
-                                                'Evento formativo creado con éxito')));
-                                    Navigator.pop(context);
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            backgroundColor: Colors.red,
-                                            content: Text(
-                                                'Error al crear el evento')));
-                                  }
-                                });
+                                if (eventoProvider.form2Key.currentState!
+                                    .validate()) {
+                                  eventoProvider.form2Key.currentState!.save();
+                                  bool confirm =
+                                      await eventoProvider.addEvento();
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (confirm) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              backgroundColor: Colors.green,
+                                              content: Text(
+                                                  'Evento formativo creado con éxito')));
+                                      Navigator.pop(context);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                  'Error al crear el evento')));
+                                    }
+                                  });
+                                }
                               }
                             },
                             child: Text(
@@ -148,11 +156,14 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Form(
-                        child: eventoProvider.index == 0
-                            ? primerFormulario()
-                            : segundoFormulario(),
-                      ),
+                      if (eventoProvider.index == 0)
+                        Form(
+                            key: eventoProvider.form1Key,
+                            child: primerFormulario()),
+                      if (eventoProvider.index == 1)
+                        Form(
+                            key: eventoProvider.form2Key,
+                            child: segundoFormulario()),
                     ],
                   ),
                 ),
@@ -173,11 +184,18 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
               Expanded(
                 child: TextFormField(
                   controller: eventoProvider.responsable.nombre,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese el nombre del evento';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText: "NOMBRE DEL EVENTO",
                     // border bottom orang
+
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
                     enabledBorder: UnderlineInputBorder(
@@ -241,6 +259,7 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                             dropdownColor: Colors.white,
 
                             isExpanded: true,
+
                             // backgroundColor: Colors.white,
                             hint: const Text(
                               "TIPO DE EVENTO",
@@ -336,10 +355,17 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   minLines: 5,
                   maxLines: 5,
                   controller: eventoProvider.responsable.descripcion,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese una descripción';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText: "DESCRIPCIÓN",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -360,12 +386,19 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   minLines: 5,
                   maxLines: 5,
                   controller: eventoProvider.responsable.objetivos,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese los objetivos';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
 
                     labelText: "DEFINICIÓN DE LOS OBJETIVOS",
                     // border bottom orang
+
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
                     enabledBorder: UnderlineInputBorder(
@@ -389,9 +422,16 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   minLines: 5,
                   maxLines: 5,
                   controller: eventoProvider.responsable.contYEstructura,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese la estructura del evento';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
+
                     labelText: "CONTENIDO Y LA ESTRUCTURA DEL PROGRAMA",
                     hintText:
                         "Ej. El programa consiste de tres fases principales...",
@@ -417,6 +457,12 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                       minLines: 1,
                       maxLines: 1,
                       keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Ingrese el costo';
+                        }
+                        return null;
+                      },
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
                       ],
@@ -446,6 +492,12 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                       minLines: 5,
                       maxLines: 5,
                       controller: eventoProvider.responsable.experiencias,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Ingrese las experiencias';
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -477,6 +529,12 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                 child: TextFormField(
                   controller: eventoProvider.responsable.cupo,
                   keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese el cupo';
+                    }
+                    return null;
+                  },
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
@@ -507,6 +565,12 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese la duración';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
@@ -536,11 +600,18 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.evaluacion,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese la estrategia de evaluación';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
 
                     filled: true,
                     labelText: "ESTRATEGIA DE EVALUACIÓN",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -561,10 +632,17 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.referencias,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese las referencias';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText: "REFERENCIAS TEÓRICAS-METODOLÓGICAS",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -589,11 +667,18 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.materialApoyo,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese los recursos y materiales de apoyo';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
 
                     filled: true,
                     labelText: "RECURSOS Y MATERIALES DIDÁCTICOS DE APOYO",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -614,10 +699,17 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.utilidad,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese la utilidad y oportunidad del programa';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText: "UTILIDAD Y OPORTUNIDAD DEL PROGRAMA",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -642,10 +734,17 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.reqParticipacion,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese los requisitos de participación';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText: "REQUISITOS DE PARTICIPACIÓN",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -667,11 +766,18 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.reqAcreditacion,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese los requisitos de acreditación';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText:
                         "REQUISITOS DE ACREDITACIÓN Y ENTREGA DE CONSTANCIA O DIPLOMA",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -697,6 +803,12 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                 child: TextFormField(
                   maxLines: 5,
                   minLines: 5,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese las condiciones operativas del evento';
+                    }
+                    return null;
+                  },
                   controller: eventoProvider.responsable.condicionesOperativas,
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
@@ -723,10 +835,17 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                   maxLines: 5,
                   minLines: 5,
                   controller: eventoProvider.responsable.dispRecursos,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Ingrese la disponibilidad de recursos';
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
                     labelText: "CAPACIDAD DE AUTOFINANCIAMIENTO",
+
                     // border bottom orang
                     labelStyle:
                         TextStyle(fontSize: 16, color: Color(0xFF004990)),
@@ -761,6 +880,12 @@ class _NuevoEventoFormativoState extends State<NuevoEventoFormativo> {
                 child: TextFormField(
                   maxLines: 5,
                   minLines: 5,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Este campo es obligatorio';
+                    }
+                    return null;
+                  },
                   controller: eventoProvider.responsable.expInstructores,
                   decoration: const InputDecoration(
                     fillColor: Colors.white,

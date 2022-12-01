@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sfaef/controller/responsableProvider.dart';
 import 'package:sfaef/views/dashboard/dashboardResponsable.dart';
 
 import '../utils/utils.dart';
@@ -34,7 +36,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarTitle(),
+      appBar: appBarTitle(context),
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,

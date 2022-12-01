@@ -19,7 +19,7 @@ class _DashboardResponsableState extends State<DashboardResponsable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarTitle(),
+      appBar: appBarTitle(context),
       body: SingleChildScrollView(
         child: SizedBox(
           width: double.infinity,
@@ -126,90 +126,86 @@ class EventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<EventoProvider>(builder: (context, eventoProvider, child) {
-      return Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFFF7F7F7),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        margin: const EdgeInsets.only(top: 20, bottom: 20),
-        padding: const EdgeInsets.only(top: 20, left: 50, right: 50),
-        width: 1400,
-        height: 700,
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    tipoEvento == TipoEvento.eventoActivo
-                        ? "Eventos Activos"
-                        : tipoEvento == TipoEvento.eventoPasado
-                            ? "Eventos Pasados"
-                            : tipoEvento == TipoEvento.eventoRechazado
-                                ? "Eventos Rechazados"
-                                : "Eventos en Espera",
-                    style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF004990)),
+      return StreamBuilder(
+          stream:
+              eventoProvider.getEventosStream(tipoEvento == TipoEvento.eventoActivo
+                  ? 'Activo'
+                  : tipoEvento == TipoEvento.eventoPasado
+                      ? 'Pasado'
+                      : tipoEvento == TipoEvento.eventoRechazado
+                          ? 'Rechazado'
+                          : 'En Espera'),
+          builder: (context, AsyncSnapshot<List<Evento>> snapshot) {
+            if (snapshot.hasError) {
+              // print(snapshot.error);
+              return const Text('Algo salio mal');
+            }
+            if (snapshot.hasData) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF7F7F7),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                margin: const EdgeInsets.only(top: 20, bottom: 20),
+                padding: const EdgeInsets.only(top: 20, left: 50, right: 50),
+                width: 1400,
+                height: 700,
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            tipoEvento == TipoEvento.eventoActivo
+                                ? "Eventos Activos"
+                                : tipoEvento == TipoEvento.eventoPasado
+                                    ? "Eventos Pasados"
+                                    : tipoEvento == TipoEvento.eventoRechazado
+                                        ? "Eventos Rechazados"
+                                        : "Eventos en Espera",
+                            style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF004990)),
+                          ),
+                          Container(
+                            width: 63,
+                            height: 3,
+                            color: tipoEvento == TipoEvento.eventoRechazado
+                                ? const Color(0xFFAA1804)
+                                : Colors.orange,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        snapshot.data!.length.toString(),
+                        style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF004990)),
+                      ),
+                    ],
                   ),
-                  Container(
-                    width: 63,
-                    height: 3,
-                    color: tipoEvento == TipoEvento.eventoRechazado
-                        ? const Color(0xFFAA1804)
-                        : Colors.orange,
-                  ),
-                ],
-              ),
-              const Text(
-                '1',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF004990)),
-              ),
-            ],
-          ),
-          // list view of 5 EventoActivo()
-          SizedBox(
-            height: 600,
-            child: FutureBuilder(
-                future: eventoProvider
-                    .getEventos(tipoEvento == TipoEvento.eventoActivo
-                        ? 'Activo'
-                        : tipoEvento == TipoEvento.eventoPasado
-                            ? 'Pasado'
-                            : tipoEvento == TipoEvento.eventoRechazado
-                                ? 'Rechazado'
-                                : 'En Espera'),
-                builder: (context, AsyncSnapshot<List<Evento>> snapshot) {
-                  if (snapshot.hasError) {
-                    // print(snapshot.error);
-                    return const Text('Algo salio mal');
-                  }
-                  if (snapshot.hasData) {
-                    //print(snapshot.data!.length.toString());
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return EventoItem(
-                          tipoEvento: tipoEvento,
-                          evento: snapshot.data![index],
-                        );
-                      },
-                      itemCount: snapshot.data!.length,
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }),
-          ),
-        ]),
-      );
+                  // list view of 5 EventoActivo()
+                  SizedBox(
+                      height: 600,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return EventoItem(
+                            tipoEvento: tipoEvento,
+                            evento: snapshot.data![index],
+                          );
+                        },
+                        itemCount: snapshot.data!.length,
+                      ))
+                ]),
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          });
     });
   }
 }

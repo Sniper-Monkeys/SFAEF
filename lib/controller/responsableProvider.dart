@@ -5,18 +5,27 @@ import '../models/responsable.dart';
 
 class ResponsableProvider with ChangeNotifier {
   Responsable? _responsable;
-  Responsable get responsable => _responsable!;
+  Responsable? get responsable => _responsable;
 
-
-  Future<void> fetchResponsable(String id) async {
-    await FirebaseFirestore.instance
-        .collection('responsables')
-        .doc(id)
+  Future<Responsable?> fetchResponsable(String id) async {
+    if (_responsable != null) {
+      return _responsable;
+    }
+    Responsable? responsable = await FirebaseFirestore.instance
+        .collection('responsable')
+        .where('uid', isEqualTo: id)
         .get()
         .then((value) {
-      _responsable = Responsable.fromFirebase(value.data());
-      notifyListeners();
+      if (value.docs.first.exists) {
+        return Responsable.fromFirebase(value.docs.first.data());
+      } else {
+        return null;
+      }
     });
-    return null;
+    if (responsable != null) {
+      _responsable = responsable;
+      notifyListeners();
+    }
+    return responsable;
   }
 }

@@ -12,7 +12,7 @@ class EventoFormativoQR extends StatelessWidget {
   Widget build(BuildContext context) {
     String data = "https://sfaef-44a5c.web.app/#/eventos?id=${evento.idEvento}";
     return Scaffold(
-        appBar: appBarTitle(),
+        appBar: appBarTitle(context),
         body: SingleChildScrollView(
             child: SizedBox(
                 width: double.infinity,

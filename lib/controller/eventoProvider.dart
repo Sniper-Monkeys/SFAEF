@@ -11,6 +11,10 @@ import 'package:flutter/services.dart';
 import '../models/evento.dart';
 
 class EventoProvider with ChangeNotifier {
+  bool isloading = false;
+  GlobalKey<FormState> form1Key = GlobalKey<FormState>();
+  GlobalKey<FormState> form2Key = GlobalKey<FormState>();
+
   final Evento _responsable = Evento(
       idEvento: '',
       idUsuario: '',
@@ -140,6 +144,16 @@ class EventoProvider with ChangeNotifier {
       return false;
     }
     return false;
+  }
+
+  Stream<List<Evento>> getEventosStream(String tipo) {
+    return FirebaseFirestore.instance
+        .collection('evento')
+        .where('idUsuario', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('estatus', isEqualTo: tipo)
+        .snapshots()
+        .map((event) =>
+            event.docs.map((e) => Evento.fromFirebase(e.data())).toList());
   }
 
   Future<List<Evento>> getEventos(String tipo) async {

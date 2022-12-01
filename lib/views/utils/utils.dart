@@ -1,12 +1,49 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-AppBar appBarTitle() {
+import '../login/login.dart';
+
+AppBar appBarTitle(BuildContext context) {
   return AppBar(
     backgroundColor: const Color(0xFF004990),
     title: const Text(
         'Sistema de Formulación y Aprobación de Eventos Formativos (SFAEF)',
         style: TextStyle(
             color: Colors.white, fontSize: 28, fontWeight: FontWeight.w200)),
+    actions: [
+      if (FirebaseAuth.instance.currentUser != null)
+        IconButton(
+          icon: const Icon(Icons.logout),
+          tooltip: 'Cerrar Sesión',
+          onPressed: () {
+            showDialog(
+              builder: (context) => AlertDialog(
+                title: const Text('Cerrar Sesión'),
+                content: const Text('¿Está seguro de cerrar sesión?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancelar'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Login()));
+                    },
+                    child: const Text('Aceptar'),
+                  ),
+                ],
+              ),
+              context: context,
+            );
+          },
+        )
+    ],
   );
 }
 

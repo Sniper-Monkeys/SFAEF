@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sfaef/controller/eventoProvider.dart';
+import 'package:sfaef/splash.dart';
 import 'package:sfaef/views/eventoFormativo/detalleEvento.dart';
 import 'controller/responsableProvider.dart';
 import 'firebase_options.dart';
@@ -39,18 +40,24 @@ class MyApp extends StatelessWidget {
             ),
             // home: const Login(),
             initialRoute: '/',
+            onUnknownRoute: (settings) {
+              return MaterialPageRoute(
+                  builder: (context) => const Login(), settings: settings);
+            },
             onGenerateRoute: (settings) {
               // print(settings.name);
-              String id = settings.name!.split('?').last.split('=').last;
-              if (settings.name != null) {
-                if (settings.name!.contains('eventos')) {
-                  return MaterialPageRoute(
-                      builder: (context) => DetalleEvento(id: id));
-                } else {
-                  return MaterialPageRoute(builder: (context) => const Login());
-                }
-              }
-              return null;
+              String? id = settings.name!.split('?').last.split('=').last;
+              return MaterialPageRoute(builder: (context) => Splash(id: id,));
+
+              // if (settings.name != null) {
+              //   if (settings.name!.contains('eventos')) {
+              //     return MaterialPageRoute(
+              //         builder: (context) => DetalleEvento(id: id));
+              //   } else {
+              //     return MaterialPageRoute(builder: (context) => Splash());
+              //   }
+              // }
+              //return null;
             }));
   }
 }

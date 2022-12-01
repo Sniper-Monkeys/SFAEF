@@ -30,7 +30,7 @@ class Responsable extends Usuario {
   factory Responsable.fromFirebase(dynamic map) => Responsable(
         nombre: map['nombre'],
         idInstitucional: map['idInstitucional'],
-        eventos: map['eventos'],
+        eventos: [],
         idUsuario: map['idUsuario'],
         correo: map['correo'],
         tipo: map['tipo'],
