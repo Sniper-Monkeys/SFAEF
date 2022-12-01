@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
 
                     loginButton(context),
                     const Text(
-                      '* En caso de contar con un evento formativo aprobado previamente por el SFAEF favor de iniciar sesión',
+                      '* En caso de contar con un evento formativo aprobado previamente por el SFAEF favor de iniciar sesión.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 16,

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sfaef/views/dashboard/dashboardResponsable.dart';
 import 'package:sfaef/views/eventoFormativo/detalleEvento.dart';
@@ -7,7 +8,9 @@ import 'package:splash_view/splash_view.dart';
 
 class Splash extends StatefulWidget {
   final String? id;
-  const Splash({Key? key, required this.id}) : super(key: key);
+  final bool isInvited;
+  const Splash({Key? key, required this.id, required this.isInvited})
+      : super(key: key);
 
   @override
   State<Splash> createState() => _SplashState();
@@ -19,38 +22,48 @@ class _SplashState extends State<Splash> {
 
   @override
   void initState() {
+    super.initState();
     // if widget.id contains any numbers
-    if (widget.id != null &&
-        widget.id!.isNotEmpty &&
-        widget.id!.contains(RegExp(r'[0-9]'))) {
+    if (widget.isInvited) {
+      if (kDebugMode) {
+        print('id: ${widget.id}');
+      }
       Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (context) => DetalleEvento(
                       id: widget.id!,
-                    )));
+                    )),
+            (route) => false);
+
+        return;
+      });
+      // if widget.id contains any numbers
+    } else if (!widget.id!.contains(RegExp(r'[0-9]'))) {
+      subscription.onData((User? user) {
+        if (user == null) {
+          Future.delayed(const Duration(seconds: 1, milliseconds: 100), () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Login()),
+                (route) => false);
+          });
+        } else {
+          Future.delayed(const Duration(seconds: 1, milliseconds: 100), () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DashboardResponsable()),
+                (route) => false);
+          });
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => const DashboardResponsable()));
+        }
       });
     }
-    subscription.onData((User? user) {
-      if (user == null) {
-        Future.delayed(const Duration(seconds: 1, milliseconds: 100), () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => const Login()));
-        });
-      } else {
-        Future.delayed(const Duration(seconds: 1, milliseconds: 100), () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const DashboardResponsable()));
-        });
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => const DashboardResponsable()));
-      }
-    });
   }
 
   @override

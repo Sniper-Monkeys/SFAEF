@@ -39,15 +39,17 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
             ),
             // home: const Login(),
-            initialRoute: '/',
-            onUnknownRoute: (settings) {
-              return MaterialPageRoute(
-                  builder: (context) => const Login(), settings: settings);
-            },
+            
             onGenerateRoute: (settings) {
+
               // print(settings.name);
               String? id = settings.name!.split('?').last.split('=').last;
-              return MaterialPageRoute(builder: (context) => Splash(id: id,));
+              bool isInvited = id.isNotEmpty && id.contains(RegExp(r'[0-9]'));
+              return MaterialPageRoute(
+                  builder: (context) => Splash(
+                        id: id,
+                        isInvited: isInvited,
+                      ));
 
               // if (settings.name != null) {
               //   if (settings.name!.contains('eventos')) {
